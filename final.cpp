@@ -32,7 +32,7 @@ class LockManager {
         mutex mtx[M];                     
         int state[M];                            
         queue<pair<int, int>> wait_queue[M];     
-        vector<vector<Node>> graph;       // wait-for graph       
+        vector<vector<Node>> graph;             
         condition_variable_any cv[M];            
         vector<Phase> transaction_phase;         
         vector<set<int>> locks_held;    
@@ -46,7 +46,6 @@ class LockManager {
                 for(const auto &node: graph[v]){
                     if(node.type == RESOURCE){
                         int rid = node.id;
-                        // Check for transactions holding the resource
                         for(int i = 0; i < N; ++i){
                             if(i != v && locks_held[i].find(rid) != locks_held[i].end()){
                                 if(!visited[i] && dfs(i, visited, rec_stack, cycle)){
@@ -94,7 +93,6 @@ class LockManager {
 
         void read_lock(int tid, int rid){
             if(transaction_phase[tid] == Phase::SHRINKING){
-                // abort transaction with an exception
                 abort_transaction(tid, 0);
             }
             unique_lock<mutex> lock(mtx[rid]);
@@ -129,7 +127,6 @@ class LockManager {
 
         void write_lock(int tid, int rid){
             if(transaction_phase[tid] == Phase::SHRINKING){
-                // abort transaction with an exception
                 abort_transaction(tid, 0);
             }
             unique_lock<mutex> lock(mtx[rid]);
@@ -167,7 +164,6 @@ class LockManager {
             unique_lock<mutex> lock(mtx[rid]);
 
             if(locks_held[tid].find(rid) == locks_held[tid].end()){
-                // abort transaction with an exception
                 abort_transaction(tid, 0);
             }
             
@@ -199,7 +195,6 @@ class LockManager {
             }
         }
 
-        // Deadlock detection now throws an exception immediately when a deadlock is detected.
         void deadlock_detection(int tid){
             unique_lock<mutex> lock(deadlock_mtx);
             osyncstream(cout) << "Transaction " << tid << " performing deadlock detection" << endl;
@@ -218,13 +213,9 @@ class LockManager {
                         cout << endl;
                         
                         int to_abort = *max_element(cycle.begin(), cycle.end());
-                        
-                        // Notify all waiting threads so they can re-check their conditions
                         for (int i = 0; i < M; i++) {
                             cv[i].notify_all();
                         }
-                        
-                        // Throw an exception to force immediate termination of the deadlocked transaction
                         throw runtime_error("Transaction " + to_string(to_abort) + " aborted due to deadlock");
                     }
                 }

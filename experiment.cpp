@@ -9,10 +9,10 @@ using namespace std;
 void func(int tid) {
     osyncstream(cout) << "func called by " << tid << endl;
     if(tid == 1) {
-        return; // Thread 1 continues normally
+        return;
     }
     else {
-        throw runtime_error("tid is 2"); // Thread 2 throws exception
+        throw runtime_error("tid is 2");
     }
 }
 
@@ -21,7 +21,7 @@ void tf(int tid) {
         osyncstream(cout) << "Transaction " << tid << " has begun" << endl;
         this_thread::sleep_for(chrono::milliseconds(1000));
         
-        func(tid); // This will throw for tid=2
+        func(tid);
         
         osyncstream(cout) << tid << " intermediate print" << endl;
     }
