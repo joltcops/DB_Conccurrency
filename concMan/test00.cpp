@@ -69,6 +69,8 @@ void t0(LockManager& lm, int tid) {
         std::println(">> Transaction {} is trying to acquire write lock on resource 1", tid);
         lm.write_lock(tid, 1);
         std::println(">> Transaction {} acquired write lock on resource 1", tid);
+        lm.allocated_edges();
+        lm.request_edges();
         lm.finish_transaction(tid);
         std::println(">> Transaction {} has finished", tid);
     } catch (const std::exception& e) {
@@ -87,6 +89,8 @@ void t1(LockManager& lm, int tid) {
         std::println(">> Transaction {} is trying to acquire write lock on resource 0", tid);
         lm.write_lock(tid, 0);
         std::println(">> Transaction {} acquired write lock on resource 0", tid);
+        lm.allocated_edges();
+        lm.request_edges();
         lm.finish_transaction(tid);
         std::println(">> Transaction {} has finished", tid);
     } catch (const std::exception& e) {

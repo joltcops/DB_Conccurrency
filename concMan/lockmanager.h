@@ -49,4 +49,7 @@ public:
     
     int canIRunDeadlockDetection(int tid);
     void deadlock_detection(int tid);
+
+    void allocated_edges();
+    void request_edges();
 };

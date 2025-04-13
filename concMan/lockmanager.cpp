@@ -266,4 +266,28 @@ bool LockManager::dfs(int v, std::vector<bool>& visited, std::vector<bool>& rec_
     return false;
 }
 
+void LockManager::allocated_edges(){
+    std::println("Allocated edges:");
+    for (int i = 0; i < N; ++i) {
+            if(locks_held[i].size()){
+            std::println("  Transaction {}: ", i);
+            for (const auto& rid : locks_held[i]) {
+                std::println("      Resource {}", rid);
+            }
+        }
+    }
+    std::println();
+}
 
+void LockManager::request_edges(){
+    std::println("Request edges:");
+    for (int i = 0; i < N; ++i) {
+        if(graph[i].size()){
+            std::println("  Transaction {}: ", i);
+            for (const auto& rid : graph[i]) {
+                std::println("      Resource {}", rid);
+            }
+        }
+    }
+    std::println();
+}
