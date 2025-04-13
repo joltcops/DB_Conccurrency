@@ -97,10 +97,12 @@ void t0(LockManager& lm, int tid) {
 // }
 
 int main() {
-    LockManager lm;
-    std::vector<std::jthread> threads;
-    threads.emplace_back(t0, std::ref(lm), 0);
-    //threads.emplace_back(t1, std::ref(lm), 1);
+    {
+        LockManager lm;
+        std::vector<std::jthread> threads;
+        threads.emplace_back(t0, std::ref(lm), 0);
+        //threads.emplace_back(t1, std::ref(lm), 1);
+    }
     std::println(">> All transactions completed.");
     return 0;
 }

@@ -3,8 +3,8 @@ Transaction 0 has begun
 >> Transaction 0 has started
 >> Transaction 0 is trying to acquire write lock on resource 0
 Transaction 0 acquired write lock on resource 0
-Transaction 1 has begun
 >> Transaction 0 acquired write lock on resource 0
+Transaction 1 has begun
 >> Transaction 1 has started
 >> Transaction 1 is trying to acquire write lock on resource 1
 Transaction 1 acquired write lock on resource 1
@@ -28,6 +28,13 @@ Transaction 1 released lock on resource 1
 Granting write lock on resource 1 to waiting transaction 0
 Transaction 0 acquired write lock on resource 1
 >> Transaction 0 acquired write lock on resource 1
+Allocated edges:
+  Transaction 0: 
+      Resource 0
+      Resource 1
+
+Request edges:
+
 Transaction 0 has finished
 Transaction 0 requesting to unlock resource 0
 >> Transaction 1 error: abort_transaction
