@@ -15,8 +15,8 @@
 #include <set>
 #include <stdexcept>
 
-#define N 3  // Number of transactions
-#define M 2  // Number of resources
+#define N 10  // Number of transactions
+#define M 10  // Number of resources
 #define TIMEOUT 10  // Timeout in seconds
 
 enum class Phase { GROWING, SHRINKING };

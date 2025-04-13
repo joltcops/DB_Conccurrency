@@ -4,7 +4,7 @@ CXXFLAGS = -std=c++23
 TARGET = lm
 LOGS = logs.txt
 
-SRCS = main.cpp lockmanager.cpp
+SRCS = test00.cpp lockmanager.cpp
 
 all:
 	$(CXX) $(CXXFLAGS) $(SRCS) -o $(TARGET)
