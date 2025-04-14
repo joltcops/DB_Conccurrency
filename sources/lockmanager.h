@@ -20,13 +20,14 @@
 #define TIMEOUT 10  // Timeout in seconds
 
 enum class Phase { GROWING, SHRINKING };
-enum class LockState { READ_REQ, WRITE_REQ, READ_GRANTED, WRITE_GRANTED, UNLOCKED };
+enum class LockState { READ_GRANTED, WRITE_GRANTED, UNLOCKED };
+enum class ReqType { READ_REQ, WRITE_REQ };
 
 class LockManager {
 private:
     std::mutex mtx[M];                     
     LockState state[M];                            
-    std::queue<std::pair<LockState, int> > wait_queue[M];    // lock_state, tid 
+    std::queue<std::pair<ReqType, int> > wait_queue[M];    // req_type, tid 
     std::vector<std::vector<int>> graph;       
     std::condition_variable_any cv[M];            
     std::vector<Phase> transaction_phase;         

@@ -96,7 +96,7 @@ void LockManager::read_lock(int tid, int rid) {
 
     if (state[rid] == LockState::WRITE_GRANTED || !wait_queue[rid].empty()) {
         std::println("Transaction {} waiting for read lock on resource {}", tid, rid);
-        wait_queue[rid].push({LockState::READ_REQ, tid});
+        wait_queue[rid].push({ReqType::READ_REQ, tid});
         graph[tid].push_back(rid);
 
         auto wait_result = cv[rid].wait_for(lock, std::chrono::seconds(TIMEOUT), 
@@ -133,7 +133,7 @@ void LockManager::write_lock(int tid, int rid) {
 
     if (state[rid] != LockState::UNLOCKED || !wait_queue[rid].empty()) {
         std::println("Transaction {} waiting for write lock on resource {}", tid, rid);
-        wait_queue[rid].push({LockState::WRITE_REQ, tid});
+        wait_queue[rid].push({ReqType::WRITE_REQ, tid});
         graph[tid].push_back(rid);
 
         auto wait_result = cv[rid].wait_for(lock, std::chrono::seconds(TIMEOUT), 
@@ -184,10 +184,10 @@ void LockManager::unlock(int tid, int rid) {
 
     if (!wait_queue[rid].empty()) {
         auto [req_type, waiting_tid] = wait_queue[rid].front();
-        state[rid] = (req_type == LockState::READ_REQ) ?
+        state[rid] = (req_type == ReqType::READ_REQ) ?
                         LockState::READ_GRANTED : LockState::UNLOCKED;
         std::println("Granting {} lock on resource {} to waiting transaction {}",
-                        (req_type == LockState::READ_REQ ? "read" : "write"), rid, waiting_tid);
+                        (req_type == ReqType::READ_REQ ? "read" : "write"), rid, waiting_tid);
         cv[rid].notify_all();
     }
 }
