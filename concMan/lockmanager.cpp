@@ -36,7 +36,7 @@ void LockManager::abort_transaction(int tid) {
 
 int LockManager::try_lock(int tid, int rid, bool is_read_lock) {
     if (transaction_phase[tid] == Phase::SHRINKING) {
-        std::println("Transaction {} in shrinking phase, cannot acquire new locks", tid);
+        std::println("Transaction {} in shrinking phase, locking violates 2PL protocol.", tid);
         return false;
     }
     
@@ -88,6 +88,7 @@ int LockManager::try_lock(int tid, int rid, bool is_read_lock) {
 
 void LockManager::read_lock(int tid, int rid) {
     if (transaction_phase[tid] == Phase::SHRINKING) {
+        std::println("Transaction {} in shrinking phase, locking violates 2PL protocol.", tid);
         abort_transaction(tid);
     }
 
@@ -124,6 +125,7 @@ void LockManager::read_lock(int tid, int rid) {
 
 void LockManager::write_lock(int tid, int rid) {
     if (transaction_phase[tid] == Phase::SHRINKING) {
+        std::println("Transaction {} in shrinking phase, locking violates 2PL protocol.", tid);
         abort_transaction(tid);
     }
 
@@ -211,7 +213,9 @@ int LockManager::canIRunDeadlockDetection(int tid){
 
 void LockManager::deadlock_detection(int tid) {
     std::println("Transaction {} performing deadlock detection", tid);
-
+    std::println("Printing graph edges:");
+    allocated_edges();
+    request_edges();
     std::vector<bool> visited(N, false), rec_stack(N, false);
     for (int i = 0; i < N; i++) {
         if (!visited[i]) {

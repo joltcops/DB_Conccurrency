@@ -1,16 +1,18 @@
 CXX = g++-14
 CXXFLAGS = -std=c++23
 
-TARGET = lm
 LOGS = logs.txt
+CLEAN_TARGETS = test0 test1 test2 test3 test4 test5
 
-SRCS = test00.cpp lockmanager.cpp
+SRC = lockmanager.cpp
 
 all:
-	$(CXX) $(CXXFLAGS) $(SRCS) -o $(TARGET)
-
-run:
-	./$(TARGET) > logs.txt
+	$(CXX) $(CXXFLAGS) $(SRC) test00.cpp -o test0
+	$(CXX) $(CXXFLAGS) $(SRC) test01.cpp -o test1
+	$(CXX) $(CXXFLAGS) $(SRC) test02.cpp -o test2
+	$(CXX) $(CXXFLAGS) $(SRC) test03.cpp -o test3
+	$(CXX) $(CXXFLAGS) $(SRC) test04.cpp -o test4
+	$(CXX) $(CXXFLAGE) $(SRC) test05.cpp -o test5
 
 clean:
-	rm -f $(TARGET) $(LOGS)
+	rm -f $(CLEAN_TARGETS) $(LOGS)
